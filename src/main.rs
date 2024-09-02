@@ -1,17 +1,16 @@
 mod errors;
 
 use errors::HashError;
+use sha1::{Digest, Sha1};
 use std::error::Error;
 use std::io::{BufRead, BufReader};
 use std::{env, fs::File};
-use sha1::digest::Output;
-use sha1::{Digest, Sha1};
 
 const SHA1_HEX_STRING_LENGTH:usize = 40;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
-    let hash_to_crack = args.get(1).expect("No hash provided. Provide hash as first parameter").trim();
+    let hash_to_crack = args.get(1).expect("No hash provided. Use cargo run -- \"5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8\"").trim();
 
     if hash_to_crack.chars().count() != SHA1_HEX_STRING_LENGTH {
         return Err(Box::new(HashError("sha1 hash is not valid".to_string())));
